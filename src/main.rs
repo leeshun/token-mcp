@@ -1,10 +1,13 @@
 pub mod config;
 pub mod request;
 pub mod service;
+pub mod util;
 
 use anyhow::Result;
 use rmcp::{ServiceExt, transport::stdio};
 use tracing_subscriber::{self, EnvFilter};
+
+use crate::config::Config;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -16,7 +19,9 @@ async fn main() -> Result<()> {
 
     tracing::info!("Starting MCP server");
 
-    let service = service::TokenService::new()
+    let config = Config::default();
+
+    let service = service::TokenService::new(config)
         .serve(stdio())
         .await
         .inspect_err(|e| {
