@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 
-use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::{prelude::*, utils::parse_units};
 use rust_decimal::prelude::ToPrimitive;
 use std::{cmp::Ordering, ops::Mul, sync::Arc};
