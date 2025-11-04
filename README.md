@@ -24,6 +24,7 @@ npx @modelcontextprotocol/inspector cargo run
 ```
 ##### 2.2 local env
 > change `wallet` value in **config.toml** file
+
 > change `infrua_key` value in **config.toml** file
 
 
