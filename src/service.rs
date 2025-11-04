@@ -1,7 +1,5 @@
 #![allow(dead_code)]
 
-use std::collections::HashMap;
-
 use axum::http::{HeaderMap, HeaderValue};
 use reqwest::Client;
 use rmcp::{
@@ -10,11 +8,8 @@ use rmcp::{
     model::{ServerCapabilities, ServerInfo},
     schemars, tool, tool_handler, tool_router,
 };
-use rust_decimal::Decimal;
 
-use crate::request::{
-    MoralisTokenPriceInfo, MoralisTokenBalanceResponse,
-};
+use crate::request::{MoralisTokenBalanceResponse, MoralisTokenPriceInfo};
 
 const USER_AGENT: &str = "token-app/1.0";
 
@@ -117,7 +112,12 @@ impl TokenService {
     #[tool(description = "swap tokens")]
     async fn swap_tokens(
         &self,
-        Parameters(SwapTokenRequest { from_token, to_token, amount,slippage }): Parameters<SwapTokenRequest>,
+        Parameters(SwapTokenRequest {
+            from_token,
+            to_token,
+            amount,
+            slippage,
+        }): Parameters<SwapTokenRequest>,
     ) -> String {
         "ok".to_string()
     }
@@ -138,7 +138,7 @@ impl TokenService {
         let mut headers = HeaderMap::new();
 
         headers.insert("accept", HeaderValue::from_str("application/json").unwrap());
-        headers.insert("X-API-Key",HeaderValue::from_str(MORALIS_API_KEY).unwrap());
+        headers.insert("X-API-Key", HeaderValue::from_str(MORALIS_API_KEY).unwrap());
 
         let response = self
             .client
@@ -164,12 +164,7 @@ impl TokenService {
         address: &str,
         contract_address: &str,
     ) -> Result<MoralisTokenBalanceResponse, String> {
-        let mut url = format!(
-            "{}/wallets/{}/tokens?chain={}",
-            BASE_URL,
-            address,
-            "eth",
-        );
+        let mut url = format!("{}/wallets/{}/tokens?chain={}", BASE_URL, address, "eth",);
 
         if !contract_address.is_empty() {
             url = format!(
