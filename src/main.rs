@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
 
     tracing::info!("Starting MCP server");
 
-    let config = Config::default();
+    let config = Config::read_from_file();
 
     let service = service::TokenService::new(config)
         .serve(stdio())
