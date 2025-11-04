@@ -181,7 +181,7 @@ impl TokenService {
 impl ServerHandler for TokenService {
     fn get_info(&self) -> ServerInfo {
         ServerInfo {
-            instructions: Some("A simple calculator".into()),
+            instructions: Some("A simple token service".into()),
             capabilities: ServerCapabilities::builder().enable_tools().build(),
             ..Default::default()
         }
