@@ -21,8 +21,6 @@ use crate::{
 const USER_AGENT: &str = "token-app/1.0";
 
 const BASE_URL: &str = "https://deep-index.moralis.io/api/v2.2";
-const MORALIS_API_KEY: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjM5NDIzZTg5LTYyMjctNDhhNC04YmUyLWE5NzNhMDlmNzJkMyIsIm9yZ0lkIjoiNDc5MzE2IiwidXNlcklkIjoiNDkzMTE4IiwidHlwZUlkIjoiMGMxYzU5ODUtNmIwMy00Y2JhLTliMTYtZmJkYjhhNmJlMDhkIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3NjIxNzg2MjEsImV4cCI6NDkxNzkzODYyMX0.ilIjc2aqu0aY98w8jYClUQQ5VI2kYVvLRQDmdQZ6A-o";
-const INFRUA_URL: &str = "https://mainnet.infura.io/v3/5cc4bf9905bc4fe286eb5f900199b07f";
 
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
 pub struct GetBalanceRequest {
@@ -79,6 +77,8 @@ pub struct TokenService {
     tool_router: ToolRouter<Self>,
     client: reqwest::Client,
     wallet: String,
+    infrua_url: String,
+    moralis_api_key: String,
 }
 
 #[tool_router]
@@ -92,6 +92,8 @@ impl TokenService {
             client: client,
             tool_router: Self::tool_router(),
             wallet: config.wallet,
+            infrua_url: config.infrua_key,
+            moralis_api_key: config.moralis_api_key,
         }
     }
 
@@ -199,7 +201,7 @@ impl TokenService {
         amount: &str,
         slippage: &str,
     ) -> Result<String, Box<dyn std::error::Error>> {
-        let infrua_client = Provider::<Http>::try_from(INFRUA_URL).unwrap();
+        let infrua_client = Provider::<Http>::try_from(self.infrua_url.clone()).unwrap();
         let infrua_client = Arc::new(infrua_client);
         let deadline = U256::from(172_000_000_0_u64);
 
@@ -254,7 +256,10 @@ impl TokenService {
         let mut headers = HeaderMap::new();
 
         headers.insert("accept", HeaderValue::from_str("application/json").unwrap());
-        headers.insert("X-API-Key", HeaderValue::from_str(MORALIS_API_KEY).unwrap());
+        headers.insert(
+            "X-API-Key",
+            HeaderValue::from_str(&self.moralis_api_key).unwrap(),
+        );
 
         let response = self
             .client
