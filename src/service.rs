@@ -125,7 +125,7 @@ impl TokenService {
         Parameters(GetTokenPriceRequest { symbol }): Parameters<GetTokenPriceRequest>,
     ) -> String {
         match self.inner_get_token_price(&symbol).await {
-            Ok(res) => res.usdPriceFormatted,
+            Ok(res) => res.usd_price_formatted,
             Err(_) => "0.00".to_string(),
         }
     }
@@ -177,7 +177,10 @@ impl TokenService {
             }
         }
 
-        match self.inner_swap_token(&from_token, &to_token, &amount, &slippage).await {
+        match self
+            .inner_swap_token(&from_token, &to_token, &amount, &slippage)
+            .await
+        {
             Ok(val) => tracing::info!("success to call swap token with result {}", val),
             Err(_) => {
                 resp.status = "failed".to_string();

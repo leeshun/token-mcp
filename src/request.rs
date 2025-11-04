@@ -1,6 +1,7 @@
 #[derive(Debug, Default, serde::Deserialize)]
 pub struct MoralisTokenPriceInfo {
-    pub usdPriceFormatted: String,
+    #[serde(rename = "usdPriceFormatted")]
+    pub usd_price_formatted: String,
 }
 
 #[derive(Debug, Default, serde::Deserialize)]

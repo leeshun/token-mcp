@@ -10,9 +10,17 @@ pub fn compare_float_str(a: &str, b: &str) -> Option<std::cmp::Ordering> {
 
 #[test]
 fn test_compare_float_str() {
-    assert_eq!(true, compare_float_str("1.2", "1.1").unwrap() == Ordering::Greater, "1.2 > 1.1");
+    assert_eq!(
+        true,
+        compare_float_str("1.2", "1.1").unwrap() == Ordering::Greater,
+        "1.2 > 1.1"
+    );
 
-    assert_eq!(true, compare_float_str("1.000", "-1.1").unwrap() == Ordering::Greater, "1.0 > -1.1");
+    assert_eq!(
+        true,
+        compare_float_str("1.000", "-1.1").unwrap() == Ordering::Greater,
+        "1.0 > -1.1"
+    );
 }
 
 pub fn get_amount_out_v2(amount_in: U256, reserve_in: U256, reserve_out: U256) -> U256 {
